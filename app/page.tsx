@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Shield, Users, FileText, Megaphone, Map } from "lucide-react";
+import { Shield, Users, FileText, Megaphone, Map, Share2 } from "lucide-react";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
           {/* Public Report Portal */}
           <Link href="/report" className="group block h-full">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-red-300 transition-all h-full flex flex-col items-center text-center space-y-4">
@@ -80,6 +80,19 @@ export default function Home() {
               <p className="text-sm text-slate-500">
                 Review AI-structured statements, credibility scores, and export
                 to CAD.
+              </p>
+            </div>
+          </Link>
+
+          {/* Share App / Community Poster */}
+          <Link href="/share" className="group block h-full">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all h-full flex flex-col items-center text-center space-y-4">
+              <div className="p-4 bg-blue-50 rounded-full text-blue-600 group-hover:bg-blue-100 transition-colors">
+                <Share2 size={32} />
+              </div>
+              <h2 className="text-xl font-semibold">Community Poster</h2>
+              <p className="text-sm text-slate-500">
+                Generate and print a generic QR code to share the app with the community.
               </p>
             </div>
           </Link>

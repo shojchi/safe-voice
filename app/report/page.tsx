@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Mic, Square, Loader2, CheckCircle2, AlertCircle, ShieldAlert, Wind, ArrowLeft } from "lucide-react";
 import { saveStatement } from "@/app/actions";
 import { GoogleGenAI, Type } from "@google/genai";
+import Link from "next/link";
 
 export default function UniversalReport() {
   const router = useRouter();
@@ -309,19 +310,35 @@ export default function UniversalReport() {
 
   if (mode === "select") {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full space-y-8">
-          <button
-            onClick={() => router.push("/")}
-            className="flex items-center space-x-2 text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            <span>Back to Dashboard</span>
-          </button>
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-slate-800">Public Report Portal</h1>
-            <p className="text-slate-500">What are you reporting today?</p>
+      <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shrink-0">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              >
+                <ArrowLeft size={20} />
+              </Link>
+              <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+              <div className="flex items-center space-x-3">
+                <div className="p-1.5 bg-indigo-100 rounded text-indigo-700">
+                  <ShieldAlert size={20} />
+                </div>
+                <h1 className="text-lg font-bold text-slate-800">
+                  Public Report Portal
+                </h1>
+              </div>
+            </div>
           </div>
+        </header>
+
+        <main className="flex-1 flex flex-col items-center justify-center p-4">
+          <div className="max-w-md w-full space-y-8">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-slate-800">What are you reporting today?</h2>
+              <p className="text-slate-500">Select the type of incident below.</p>
+            </div>
 
           <div className="grid gap-4">
             <button
@@ -351,23 +368,47 @@ export default function UniversalReport() {
             </button>
           </div>
         </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-slate-800">
-            {mode === "crime" ? "Anonymous Crime Report" : "Hazard / Disaster Report"}
-          </h1>
-          <p className="text-slate-500 text-sm">
-            {mode === "crime" 
-              ? "Your identity is hidden. Please describe what you saw."
-              : "Please describe the hazard, visibility, and any trapped individuals."}
-          </p>
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shrink-0">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setMode("select")}
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+            <div className="flex items-center space-x-3">
+              <div className={`p-1.5 rounded ${mode === "crime" ? "bg-indigo-100 text-indigo-700" : "bg-amber-100 text-amber-700"}`}>
+                {mode === "crime" ? <ShieldAlert size={20} /> : <Wind size={20} />}
+              </div>
+              <h1 className="text-lg font-bold text-slate-800">
+                {mode === "crime" ? "Anonymous Crime Report" : "Hazard / Disaster Report"}
+              </h1>
+            </div>
+          </div>
         </div>
+      </header>
+
+      <main className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl font-bold text-slate-800">
+              Record Statement
+            </h2>
+            <p className="text-slate-500 text-sm">
+              {mode === "crime" 
+                ? "Your identity is hidden. Please describe what you saw."
+                : "Please describe the hazard, visibility, and any trapped individuals."}
+            </p>
+          </div>
 
         {error && (
           <div className="bg-red-50 text-red-700 p-4 rounded-xl flex items-start space-x-3 text-sm">
@@ -434,16 +475,8 @@ export default function UniversalReport() {
               : "Tap the microphone to start recording your statement."}
           </p>
         </div>
-
-        <div className="pt-4 border-t border-slate-100 text-center">
-          <button
-            onClick={() => setMode("select")}
-            className="text-sm text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            Cancel and go back
-          </button>
-        </div>
       </div>
+      </main>
     </div>
   );
 }

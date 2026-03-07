@@ -85,38 +85,40 @@ export default function MapPage() {
     <div className="h-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 shrink-0">
-        <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="px-4 sm:px-6 lg:px-8 min-h-[4rem] py-2 flex items-center justify-between">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 shrink-0"
             >
               <ArrowLeft size={20} />
             </Link>
-            <div className="h-6 w-px bg-slate-200"></div>
-            <div className="flex items-center space-x-3">
-              <div className="p-1.5 bg-orange-100 rounded text-orange-700">
+            <div className="h-6 w-px bg-slate-200 shrink-0 hidden sm:block"></div>
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="p-1.5 bg-orange-100 rounded text-orange-700 shrink-0">
                 <MapPin size={20} />
               </div>
-              <h1 className="text-lg font-bold text-slate-800">
+              <h1 className="text-base sm:text-lg font-bold text-slate-800 leading-tight">
                 Live Hazard Map
               </h1>
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-slate-500 hidden sm:inline-block">Timeframe:</span>
+          <div className="flex flex-col items-center justify-center shrink-0 ml-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-[5px] text-center">
+              Last
+            </span>
             <select 
               value={timeframe}
               onChange={(e) => setTimeframe(e.target.value as Timeframe)}
-              className="bg-slate-100 border-none text-sm font-medium rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-orange-500 outline-none"
+              className="bg-slate-100 border-none text-xs sm:text-sm font-medium rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:ring-2 focus:ring-orange-500 outline-none text-center"
             >
-              <option value="30m">Last 30 Min</option>
-              <option value="1h">Last 1 Hour</option>
-              <option value="3h">Last 3 Hours</option>
-              <option value="5h">Last 5 Hours</option>
-              <option value="12h">Last 12 Hours</option>
-              <option value="24h">Last 24 Hours</option>
+              <option value="30m">30 Min</option>
+              <option value="1h">1 Hour</option>
+              <option value="3h">3 Hours</option>
+              <option value="5h">5 Hours</option>
+              <option value="12h">12 Hours</option>
+              <option value="24h">24 Hours</option>
             </select>
           </div>
         </div>
@@ -126,8 +128,8 @@ export default function MapPage() {
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         
         {/* Left Sidebar - List of Reports */}
-        <div className="w-full md:w-1/3 lg:w-1/4 bg-white border-r border-slate-200 flex flex-col overflow-hidden shrink-0">
-          <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+        <div className="w-full md:w-1/3 lg:w-1/4 bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col overflow-hidden flex-1 md:flex-none">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
             <h2 className="font-semibold text-slate-800">Recent Reports</h2>
             <span className="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded-full">
               {filteredStatements.length}
@@ -146,15 +148,15 @@ export default function MapPage() {
             ) : (
               filteredStatements.map((stmt) => (
                 <div key={stmt.id} className="bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-orange-300 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 mb-2">
                     <div className="flex items-center space-x-2">
                       {getIconForType(stmt.type, stmt.structuredData?.hazardCategory)}
                       <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                         {stmt.type === "crime" ? "Crime" : stmt.structuredData?.hazardCategory || "Hazard"}
                       </span>
                     </div>
-                    <span className="text-xs text-slate-500 flex items-center">
-                      <Clock size={12} className="mr-1" />
+                    <span className="text-xs text-slate-500 flex items-center whitespace-nowrap">
+                      <Clock size={12} className="mr-1 shrink-0" />
                       {formatDistanceToNow(new Date(stmt.createdAt), { addSuffix: true })}
                     </span>
                   </div>

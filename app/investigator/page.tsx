@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchCases } from "@/app/actions";
-import { FileText, ArrowRight, Search, Clock, ShieldAlert } from "lucide-react";
+import { FileText, ArrowRight, Search, Clock, ShieldAlert, ArrowLeft } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Case } from "@/lib/db";
 
@@ -29,20 +29,23 @@ export default function InvestigatorDashboard() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-amber-100 rounded-lg text-amber-700">
-              <ShieldAlert size={24} />
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+            >
+              <ArrowLeft size={20} />
+            </Link>
+            <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+            <div className="flex items-center space-x-3">
+              <div className="p-1.5 bg-amber-100 rounded text-amber-700">
+                <ShieldAlert size={20} />
+              </div>
+              <h1 className="text-lg font-bold text-slate-800">
+                Investigator Dashboard
+              </h1>
             </div>
-            <h1 className="text-xl font-bold text-slate-800">
-              Investigator Dashboard
-            </h1>
           </div>
-          <Link
-            href="/"
-            className="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            Exit
-          </Link>
         </div>
       </header>
 

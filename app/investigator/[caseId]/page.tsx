@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { fetchCaseDetails, fetchStatements } from "@/app/actions";
 import {
   ArrowLeft,
-  Download,
+  Printer,
   ShieldAlert,
   CheckCircle2,
   AlertTriangle,
@@ -68,22 +68,8 @@ export default function CaseDetails() {
     );
   }
 
-  const exportToCAD = () => {
-    // Mock export functionality
-    const dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(
-        JSON.stringify({ case: caseData, statements }, null, 2),
-      );
-    const downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute(
-      "download",
-      `CAD_Export_${caseData.caseNumber}.json`,
-    );
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -108,11 +94,11 @@ export default function CaseDetails() {
             </div>
           </div>
           <button
-            onClick={exportToCAD}
-            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            onClick={handlePrint}
+            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm print:hidden"
           >
-            <Download size={16} />
-            <span>Export to CAD</span>
+            <Printer size={16} />
+            <span>Print to PDF</span>
           </button>
         </div>
       </header>
