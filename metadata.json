@@ -1,0 +1,5 @@
+{
+  "name": "SafeVoice",
+  "description": "Anonymous witness statement collection tool for law enforcement and communities.",
+  "requestFramePermissions": ["microphone"]
+}
