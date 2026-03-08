@@ -6,6 +6,8 @@ import {
   getCaseById,
   addStatement,
   getStatementsByCaseId,
+  findOrCreateTemporaryCase,
+  updateCaseNumber,
 } from "@/lib/db";
 import { GoogleGenAI, Type } from "@google/genai";
 
@@ -36,8 +38,13 @@ export async function saveStatement(
   conflictingDetails: string[]
 ) {
   try {
+    let actualCaseId = caseId;
+    if (caseId === "public-reports") {
+      actualCaseId = findOrCreateTemporaryCase(type, location, structuredData);
+    }
+
     const newStatement = addStatement({
-      caseId,
+      caseId: actualCaseId,
       type,
       location,
       transcript,
@@ -51,4 +58,10 @@ export async function saveStatement(
     console.error("Error saving statement:", error);
     return { success: false, error: error.message || "Failed to save statement" };
   }
+}
+
+export async function assignCadNumber(caseId: string, cadNumber: string) {
+  const updated = updateCaseNumber(caseId, cadNumber);
+  if (updated) return { success: true, case: updated };
+  return { success: false, error: "Case not found" };
 }

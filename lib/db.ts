@@ -5,6 +5,8 @@ export interface Case {
   caseNumber: string;
   createdAt: string;
   status: "open" | "closed";
+  isTemporary?: boolean;
+  location?: { lat: number; lng: number };
 }
 
 export interface Statement {
@@ -160,4 +162,92 @@ export function addStatement(
 
 export function getStatementsByCaseId(caseId: string): Statement[] {
   return db.statements.filter((s) => s.caseId === caseId);
+}
+
+export function findOrCreateTemporaryCase(
+  type: "crime" | "hazard",
+  location?: { lat: number; lng: number },
+  structuredData?: any
+): string {
+  const now = Date.now();
+  const THIRTY_MINS = 30 * 60 * 1000;
+  
+  const recentCases = db.cases.filter(c => 
+    c.isTemporary && 
+    c.status === "open" &&
+    (now - new Date(c.createdAt).getTime()) <= THIRTY_MINS
+  );
+
+  let matchedCase = null;
+
+  if (location) {
+    matchedCase = recentCases.find(c => {
+      if (!c.location) return false;
+      
+      // Haversine distance in meters
+      const R = 6371e3; // Earth radius in meters
+      const lat1 = c.location.lat * Math.PI/180;
+      const lat2 = location.lat * Math.PI/180;
+      const dLat = (location.lat - c.location.lat) * Math.PI/180;
+      const dLng = (location.lng - c.location.lng) * Math.PI/180;
+      
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c_rad = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c_rad;
+      
+      return distance <= 500;
+    });
+  }
+
+  if (matchedCase) {
+    return matchedCase.id;
+  }
+
+  const id = uuidv4();
+  
+  let incidentName = type === "crime" ? "Suspicious Activity" : "Hazard";
+  if (structuredData) {
+    if (structuredData.shortTitle) {
+      incidentName = structuredData.shortTitle;
+    } else if (type === "crime" && structuredData.suspectDescription) {
+      incidentName = "Crime Report";
+    } else if (type === "hazard" && structuredData.hazardCategory) {
+      incidentName = structuredData.hazardCategory.charAt(0).toUpperCase() + structuredData.hazardCategory.slice(1) + " Incident";
+    }
+  }
+
+  const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+  let locString = "Unknown Location";
+  if (structuredData && structuredData.humanReadableLocation) {
+    locString = structuredData.humanReadableLocation;
+  } else if (location) {
+    locString = `Lat: ${location.lat.toFixed(2)}, Lng: ${location.lng.toFixed(2)}`;
+  }
+  
+  const caseNumber = `${incidentName} - ${locString} - ${timeString}`;
+
+  const newCase: Case = {
+    id,
+    caseNumber,
+    createdAt: new Date().toISOString(),
+    status: "open",
+    isTemporary: true,
+    location
+  };
+
+  db.cases.push(newCase);
+  return id;
+}
+
+export function updateCaseNumber(id: string, newCaseNumber: string): Case | undefined {
+  const c = db.cases.find(c => c.id === id);
+  if (c) {
+    c.caseNumber = newCaseNumber;
+    c.isTemporary = false;
+    return c;
+  }
+  return undefined;
 }

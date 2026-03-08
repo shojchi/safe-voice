@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { fetchCaseDetails, fetchStatements } from "@/app/actions";
+import { fetchCaseDetails, fetchStatements, assignCadNumber } from "@/app/actions";
 import {
   ArrowLeft,
   Printer,
@@ -14,6 +14,12 @@ import {
   User,
   Car,
   FileText,
+  Edit2,
+  Flame,
+  Wind,
+  Users,
+  EyeOff,
+  AlertOctagon,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Case, Statement } from "@/lib/db";
@@ -27,6 +33,10 @@ export default function CaseDetails() {
   const [caseData, setCaseData] = useState<Case | null>(null);
   const [statements, setStatements] = useState<Statement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  const [isEditingCad, setIsEditingCad] = useState(false);
+  const [newCadNumber, setNewCadNumber] = useState("");
+  const [isSavingCad, setIsSavingCad] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -72,6 +82,22 @@ export default function CaseDetails() {
     window.print();
   };
 
+  const handleSaveCad = async () => {
+    if (!newCadNumber.trim() || !caseData) return;
+    setIsSavingCad(true);
+    try {
+      const res = await assignCadNumber(caseData.id, newCadNumber.trim());
+      if (res.success && res.case) {
+        setCaseData(res.case);
+        setIsEditingCad(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSavingCad(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
@@ -88,9 +114,51 @@ export default function CaseDetails() {
               <div className="p-1.5 bg-amber-100 rounded text-amber-700">
                 <ShieldAlert size={20} />
               </div>
-              <h1 className="text-lg font-bold text-slate-800">
-                Case {caseData.caseNumber}
-              </h1>
+              <div className="flex items-center space-x-2">
+                {isEditingCad ? (
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={newCadNumber}
+                      onChange={(e) => setNewCadNumber(e.target.value)}
+                      placeholder="Enter CAD Number"
+                      className="px-3 py-1 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      autoFocus
+                    />
+                    <button
+                      onClick={handleSaveCad}
+                      disabled={isSavingCad}
+                      className="text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-md font-medium transition-colors disabled:opacity-50"
+                    >
+                      {isSavingCad ? "Saving..." : "Save"}
+                    </button>
+                    <button
+                      onClick={() => setIsEditingCad(false)}
+                      className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <h1 className="text-lg font-bold text-slate-800">
+                      Case {caseData.caseNumber}
+                    </h1>
+                    {caseData.isTemporary && (
+                      <button
+                        onClick={() => {
+                          setNewCadNumber("");
+                          setIsEditingCad(true);
+                        }}
+                        className="p-1 text-slate-400 hover:text-amber-600 transition-colors rounded"
+                        title="Assign Official CAD Number"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
           <button
@@ -179,68 +247,169 @@ export default function CaseDetails() {
                     </h3>
 
                     <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <User
-                          size={18}
-                          className="text-indigo-500 mt-0.5 shrink-0"
-                        />
-                        <div>
-                          <h4 className="text-xs font-semibold text-slate-500 uppercase">
-                            Suspect
-                          </h4>
-                          <p className="text-sm text-slate-800 mt-0.5">
-                            {stmt.structuredData.suspectDescription ||
-                              "Not provided"}
-                          </p>
-                        </div>
-                      </div>
+                      {stmt.type === "crime" ? (
+                        <>
+                          <div className="flex items-start space-x-3">
+                            <User
+                              size={18}
+                              className="text-indigo-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Suspect
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.suspectDescription ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
 
-                      <div className="flex items-start space-x-3">
-                        <Car
-                          size={18}
-                          className="text-indigo-500 mt-0.5 shrink-0"
-                        />
-                        <div>
-                          <h4 className="text-xs font-semibold text-slate-500 uppercase">
-                            Vehicle
-                          </h4>
-                          <p className="text-sm text-slate-800 mt-0.5">
-                            {stmt.structuredData.vehicleDescription ||
-                              "Not provided"}
-                          </p>
-                        </div>
-                      </div>
+                          <div className="flex items-start space-x-3">
+                            <Car
+                              size={18}
+                              className="text-indigo-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Vehicle
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.vehicleDescription ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
 
-                      <div className="flex items-start space-x-3">
-                        <Clock
-                          size={18}
-                          className="text-indigo-500 mt-0.5 shrink-0"
-                        />
-                        <div>
-                          <h4 className="text-xs font-semibold text-slate-500 uppercase">
-                            Timeline
-                          </h4>
-                          <p className="text-sm text-slate-800 mt-0.5">
-                            {stmt.structuredData.timeline || "Not provided"}
-                          </p>
-                        </div>
-                      </div>
+                          <div className="flex items-start space-x-3">
+                            <Clock
+                              size={18}
+                              className="text-indigo-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Timeline
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.timeline || "Not provided"}
+                              </p>
+                            </div>
+                          </div>
 
-                      <div className="flex items-start space-x-3">
-                        <MapPin
-                          size={18}
-                          className="text-indigo-500 mt-0.5 shrink-0"
-                        />
-                        <div>
-                          <h4 className="text-xs font-semibold text-slate-500 uppercase">
-                            Location
-                          </h4>
-                          <p className="text-sm text-slate-800 mt-0.5">
-                            {stmt.structuredData.locationDetails ||
-                              "Not provided"}
-                          </p>
-                        </div>
-                      </div>
+                          <div className="flex items-start space-x-3">
+                            <MapPin
+                              size={18}
+                              className="text-indigo-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Location
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.locationDetails ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-start space-x-3">
+                            <AlertTriangle
+                              size={18}
+                              className="text-amber-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Hazard Category
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5 capitalize">
+                                {stmt.structuredData.hazardCategory ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-3">
+                            <Flame
+                              size={18}
+                              className="text-orange-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Fire Direction
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.fireDirection ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-3">
+                            <Wind
+                              size={18}
+                              className="text-blue-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Wind Speed/Direction
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.windSpeed || "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-3">
+                            <Users
+                              size={18}
+                              className="text-rose-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Trapped Individuals
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.trappedIndividuals ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-3">
+                            <AlertOctagon
+                              size={18}
+                              className="text-slate-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Road Blockages
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.roadBlockages ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start space-x-3">
+                            <EyeOff
+                              size={18}
+                              className="text-slate-500 mt-0.5 shrink-0"
+                            />
+                            <div>
+                              <h4 className="text-xs font-semibold text-slate-500 uppercase">
+                                Visibility
+                              </h4>
+                              <p className="text-sm text-slate-800 mt-0.5">
+                                {stmt.structuredData.visibility ||
+                                  "Not provided"}
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     {stmt.structuredData.uniqueDetails &&

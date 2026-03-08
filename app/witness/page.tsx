@@ -47,7 +47,7 @@ export default function WitnessEntry() {
               Submit a Statement
             </h2>
             <p className="text-slate-500 text-sm">
-              Your identity is protected. We do not collect your name, phone
+              Your statement is anonymous. We do not collect your name, phone
               number, or location.
             </p>
           </div>

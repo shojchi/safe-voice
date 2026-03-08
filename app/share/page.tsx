@@ -19,22 +19,35 @@ export default function SharePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4">
-      <div className="absolute top-4 left-4 print:hidden">
-        <Link
-          href="/"
-          className="flex items-center space-x-2 text-slate-500 hover:text-slate-800 transition-colors bg-white px-4 py-2 rounded-full shadow-sm"
-        >
-          <ArrowLeft size={20} />
-          <span className="font-medium">Back to Home</span>
-        </Link>
-      </div>
-
-      <div className="max-w-2xl w-full bg-white p-8 md:p-16 rounded-3xl shadow-xl border border-slate-200 text-center space-y-8 print:shadow-none print:border-none print:p-0">
-        <div className="space-y-4">
-          <div className="inline-flex items-center justify-center p-4 bg-indigo-100 text-indigo-700 rounded-full mb-4 print:hidden">
-            <Share2 size={40} />
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-10 shrink-0 print:hidden">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+            >
+              <ArrowLeft size={20} />
+            </Link>
+            <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+            <div className="flex items-center space-x-3">
+              <div className="p-1.5 bg-blue-100 rounded text-blue-700">
+                <Share2 size={20} />
+              </div>
+              <h1 className="text-lg font-bold text-slate-800">
+                QR Code
+              </h1>
+            </div>
           </div>
+        </div>
+      </header>
+
+      <main className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="max-w-2xl w-full bg-white p-8 md:p-16 rounded-3xl shadow-xl border border-slate-200 text-center space-y-8 print:shadow-none print:border-none print:p-0">
+          <div className="space-y-4">
+            <div className="inline-flex items-center justify-center p-4 bg-indigo-100 text-indigo-700 rounded-full mb-4 print:hidden">
+              <Share2 size={40} />
+            </div>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-indigo-900">
             SafeVoice
           </h1>
@@ -55,19 +68,20 @@ export default function SharePage() {
           )}
         </div>
 
-        <div className="space-y-4 print:hidden">
-          <p className="text-slate-500">
-            Print this code to create decals, posters, or flyers for your community.
-          </p>
-          <button
-            onClick={handlePrint}
-            className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors shadow-md hover:shadow-lg"
-          >
-            <Printer size={24} />
-            <span>Print Poster / Decal</span>
-          </button>
+          <div className="space-y-4 print:hidden">
+            <p className="text-slate-500">
+              Print this code to create decals, posters, or flyers for your community.
+            </p>
+            <button
+              onClick={handlePrint}
+              className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors shadow-md hover:shadow-lg"
+            >
+              <Printer size={24} />
+              <span>Print QR code</span>
+            </button>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

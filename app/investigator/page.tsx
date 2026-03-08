@@ -93,6 +93,11 @@ export default function InvestigatorDashboard() {
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
                         {c.status.toUpperCase()}
                       </span>
+                      {c.isTemporary && (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                          TEMPORARY
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center text-sm text-slate-500 space-x-4">
                       <span className="flex items-center space-x-1">
