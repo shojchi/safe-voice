@@ -216,22 +216,36 @@ export default function WitnessRecording() {
           },
         },
       };
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [
-          {
-            inlineData: {
-              mimeType: cleanMimeType,
-              data: base64Audio,
+
+      // Add a 60-second timeout to prevent infinite hangs
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.error("API call timed out after 60 seconds");
+        controller.abort();
+      }, 60000);
+
+      let response;
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: [
+            {
+              inlineData: {
+                mimeType: cleanMimeType,
+                data: base64Audio,
+              },
             },
+            { text: promptText },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: responseSchema,
+            abortSignal: controller.signal,
           },
-          { text: promptText },
-        ],
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: responseSchema,
-        },
-      });
+        });
+      } finally {
+        clearTimeout(timeoutId);
+      }
 
       const resultText = response.text || "{}";
       let result;

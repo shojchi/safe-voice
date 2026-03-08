@@ -2,28 +2,75 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchCases } from "@/app/actions";
-import { FileText, ArrowRight, Search, Clock, ShieldAlert, ArrowLeft } from "lucide-react";
+import { fetchCases, runDatabaseSeed, removeCase } from "@/app/actions";
+import {
+  FileText,
+  ArrowRight,
+  Search,
+  Clock,
+  ShieldAlert,
+  ArrowLeft,
+  Database,
+  Trash2,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Case } from "@/lib/db";
 
 export default function InvestigatorDashboard() {
   const [cases, setCases] = useState<Case[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  const loadCases = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchCases();
+      setCases(data);
+    } catch (error) {
+      console.error("Failed to load cases:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadCases = async () => {
-      try {
-        const data = await fetchCases();
-        setCases(data);
-      } catch (error) {
-        console.error("Failed to load cases:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     loadCases();
   }, []);
+
+  const handleSeed = async () => {
+    setIsSeeding(true);
+    try {
+      const res = await runDatabaseSeed();
+      if (res.success) {
+        await loadCases();
+      }
+    } catch (e) {
+      console.error("Failed to seed db", e);
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+
+  const handleDeleteCase = async (e: React.MouseEvent, id: string) => {
+    e.preventDefault(); // Prevent navigating to the case details
+    if (
+      confirm(
+        "Are you sure you want to delete this case? All associated statements will also be deleted.",
+      )
+    ) {
+      try {
+        const success = await removeCase(id);
+        if (success) {
+          await loadCases();
+        } else {
+          alert("Failed to delete case. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error deleting case:", error);
+        alert("An error occurred while deleting the case.");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -51,9 +98,19 @@ export default function InvestigatorDashboard() {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-slate-800">
-            Active Cases
-          </h2>
+          <div className="flex items-center space-x-4">
+            <h2 className="text-2xl font-semibold text-slate-800">
+              Active Cases
+            </h2>
+            <button
+              onClick={handleSeed}
+              disabled={isSeeding}
+              className="flex items-center space-x-2 text-xs font-medium bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+            >
+              <Database size={14} />
+              <span>{isSeeding ? "Seeding..." : "Seed Demo Data"}</span>
+            </button>
+          </div>
           <div className="relative w-64">
             <input
               type="text"
@@ -112,8 +169,17 @@ export default function InvestigatorDashboard() {
                       <span>ID: {c.id.slice(0, 8)}...</span>
                     </div>
                   </div>
-                  <div className="p-2 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all">
-                    <ArrowRight size={20} />
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={(e) => handleDeleteCase(e, c.id)}
+                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                      title="Delete Case"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                    <div className="p-2 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all">
+                      <ArrowRight size={20} />
+                    </div>
                   </div>
                 </div>
               </Link>

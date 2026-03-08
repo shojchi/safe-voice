@@ -166,7 +166,6 @@ function UniversalReportContent() {
     try {
       const base64Audio = await blobToBase64(audioBlob);
       const cleanMimeType = audioBlob.type.split(";")[0] || "audio/webm";
-
       const apiKey =
         process.env.NEXT_PUBLIC_USER_GEMINI_API_KEY ||
         process.env.NEXT_PUBLIC_GEMINI_API_KEY;
@@ -314,22 +313,35 @@ function UniversalReportContent() {
         };
       }
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [
-          {
-            inlineData: {
-              mimeType: cleanMimeType,
-              data: base64Audio,
+      // Add a 60-second timeout to prevent infinite hangs
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.error("API call timed out after 60 seconds");
+        controller.abort();
+      }, 60000);
+
+      let response;
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: [
+            {
+              inlineData: {
+                mimeType: cleanMimeType,
+                data: base64Audio,
+              },
             },
+            { text: promptText },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: responseSchema,
+            abortSignal: controller.signal,
           },
-          { text: promptText },
-        ],
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: responseSchema,
-        },
-      });
+        });
+      } finally {
+        clearTimeout(timeoutId);
+      }
 
       const resultText = response.text || "{}";
       let result;
@@ -363,9 +375,13 @@ function UniversalReportContent() {
       }
     } catch (err: any) {
       console.error("Submission error:", err);
-      setError(
-        err.message || "An unexpected error occurred during submission.",
-      );
+      if (err.name === "AbortError") {
+        setError("Request timed out. Please try again.");
+      } else {
+        setError(
+          err.message || "An unexpected error occurred during submission.",
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -386,17 +402,18 @@ function UniversalReportContent() {
             sent to the command center.
           </p>
           <div className="pt-6 border-t border-slate-100">
-            <button
+            <Link
               onClick={() => {
                 setIsSuccess(false);
                 setMode("select");
                 setAudioUrl(null);
                 setAudioBlob(null);
               }}
+              href="/"
               className="text-emerald-600 font-medium hover:text-emerald-800 transition-colors"
             >
-              Submit Another Report
-            </button>
+              Return to Dashboard
+            </Link>
           </div>
         </div>
       </div>

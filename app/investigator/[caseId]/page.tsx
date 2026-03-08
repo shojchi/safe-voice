@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { fetchCaseDetails, fetchStatements, assignCadNumber } from "@/app/actions";
+import {
+  fetchCaseDetails,
+  fetchStatements,
+  assignCadNumber,
+  removeCase,
+  removeStatement,
+} from "@/app/actions";
 import {
   ArrowLeft,
   Printer,
@@ -20,6 +26,7 @@ import {
   Users,
   EyeOff,
   AlertOctagon,
+  Trash2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Case, Statement } from "@/lib/db";
@@ -33,7 +40,7 @@ export default function CaseDetails() {
   const [caseData, setCaseData] = useState<Case | null>(null);
   const [statements, setStatements] = useState<Statement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const [isEditingCad, setIsEditingCad] = useState(false);
   const [newCadNumber, setNewCadNumber] = useState("");
   const [isSavingCad, setIsSavingCad] = useState(false);
@@ -95,6 +102,40 @@ export default function CaseDetails() {
       console.error(err);
     } finally {
       setIsSavingCad(false);
+    }
+  };
+
+  const handleDeleteCase = async () => {
+    if (
+      confirm(
+        "Are you sure you want to delete this case? All associated statements will also be deleted.",
+      )
+    ) {
+      try {
+        const success = await removeCase(caseId);
+        if (success) {
+          router.push("/investigator");
+        } else {
+          alert("Failed to delete case.");
+        }
+      } catch (error) {
+        console.error("Error deleting case:", error);
+      }
+    }
+  };
+
+  const handleDeleteStatement = async (statementId: string) => {
+    if (confirm("Are you sure you want to delete this statement?")) {
+      try {
+        const success = await removeStatement(statementId);
+        if (success) {
+          setStatements(statements.filter((s) => s.id !== statementId));
+        } else {
+          alert("Failed to delete statement.");
+        }
+      } catch (error) {
+        console.error("Error deleting statement:", error);
+      }
     }
   };
 
@@ -161,13 +202,22 @@ export default function CaseDetails() {
               </div>
             </div>
           </div>
-          <button
-            onClick={handlePrint}
-            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm print:hidden"
-          >
-            <Printer size={16} />
-            <span>Print to PDF</span>
-          </button>
+          <div className="flex items-center space-x-3 print:hidden">
+            <button
+              onClick={handleDeleteCase}
+              className="flex items-center space-x-2 text-red-600 hover:bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              <Trash2 size={16} />
+              <span>Delete Case</span>
+            </button>
+            <button
+              onClick={handlePrint}
+              className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            >
+              <Printer size={16} />
+              <span>Print to PDF</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -237,6 +287,14 @@ export default function CaseDetails() {
                         </span>
                       </div>
                     </div>
+                    <div className="h-8 w-px bg-slate-200 ml-2 border-l border-slate-200"></div>
+                    <button
+                      onClick={() => handleDeleteStatement(stmt.id)}
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                      title="Delete Statement"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
 
@@ -356,7 +414,8 @@ export default function CaseDetails() {
                                 Wind Speed/Direction
                               </h4>
                               <p className="text-sm text-slate-800 mt-0.5">
-                                {stmt.structuredData.windSpeed || "Not provided"}
+                                {stmt.structuredData.windSpeed ||
+                                  "Not provided"}
                               </p>
                             </div>
                           </div>
