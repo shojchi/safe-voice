@@ -103,6 +103,9 @@ export default function SharePage() {
           </p>
         </div>
       </main>
+      <footer className="text-center text-xs text-slate-400 py-4 print:hidden">
+        © 2026 City of Montgomery, Alabama. All rights reserved.
+      </footer>
     </div>
   );
 }

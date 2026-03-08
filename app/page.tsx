@@ -122,6 +122,9 @@ export default function Home() {
           </Link>
         </div>
       </div>
+      <p className="text-center text-xs text-slate-400 mt-8 pb-4">
+        © 2026 City of Montgomery, Alabama. All rights reserved.
+      </p>
     </div>
   );
 }
