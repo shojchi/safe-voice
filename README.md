@@ -18,6 +18,7 @@ AI-powered anonymous reporting and witness statement collection system for publi
    ```env
    NEXT_PUBLIC_GEMINI_API_KEY="your_gemini_api_key_here"
    ```
+   > **Note:** The app checks `NEXT_PUBLIC_USER_GEMINI_API_KEY` first, then falls back to `NEXT_PUBLIC_GEMINI_API_KEY`. Set whichever is appropriate for your environment.
 3. Install dependencies:
    ```bash
    npm install
@@ -29,7 +30,7 @@ AI-powered anonymous reporting and witness statement collection system for publi
 
 ## Deploy to Vercel
 
-Set `NEXT_PUBLIC_GEMINI_API_KEY` as an environment variable in your Vercel project settings.
+Set `NEXT_PUBLIC_GEMINI_API_KEY` (or `NEXT_PUBLIC_USER_GEMINI_API_KEY`) as an environment variable in your Vercel project settings.
 
 ## AI Studio
 
