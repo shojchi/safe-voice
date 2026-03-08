@@ -4,6 +4,9 @@ import "./globals.css"; // Global styles
 export const metadata: Metadata = {
   title: "SafeVoice",
   description: "SafeVoice - Voice-based emergency reporting system",
+  icons: {
+    icon: "/images/montgomery_logo.ico",
+  },
 };
 
 export default function RootLayout({
