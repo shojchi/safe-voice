@@ -99,7 +99,7 @@ export default function SharePage() {
           {/* Print-only footer */}
           <p className="hidden print:block text-xs text-slate-400 mt-8 tracking-wide">
             An official service of the City of Montgomery, Alabama ·
-            safetyreport.montgomery.gov
+            safetyreport.montgomery.gov (sample)
           </p>
         </div>
       </main>
