@@ -15,6 +15,20 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4">
       <div className="max-w-5xl w-full space-y-8">
         <div className="text-center space-y-4">
+          <div className="flex flex-col items-center space-y-3 print:space-y-2">
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200 print:shadow-none text-4xl">
+              🏛️
+            </div>
+            <div>
+              <p className="text-xs font-bold tracking-[0.25em] uppercase text-amber-700">
+                City of Montgomery
+              </p>
+              <p className="text-xs text-slate-400 tracking-widest uppercase mt-0.5">
+                Alabama · Public Safety
+              </p>
+            </div>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
+          </div>
           <h1 className="text-5xl font-bold tracking-tight text-indigo-900">
             SafeVoice
           </h1>

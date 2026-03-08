@@ -34,9 +34,7 @@ export default function SharePage() {
               <div className="p-1.5 bg-blue-100 rounded text-blue-700">
                 <Share2 size={20} />
               </div>
-              <h1 className="text-lg font-bold text-slate-800">
-                QR Code
-              </h1>
+              <h1 className="text-lg font-bold text-slate-800">QR Code</h1>
             </div>
           </div>
         </div>
@@ -45,32 +43,49 @@ export default function SharePage() {
       <main className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="max-w-2xl w-full bg-white p-8 md:p-16 rounded-3xl shadow-xl border border-slate-200 text-center space-y-8 print:shadow-none print:border-none print:p-0">
           <div className="space-y-4">
-            <div className="inline-flex items-center justify-center p-4 bg-indigo-100 text-indigo-700 rounded-full mb-4 print:hidden">
-              <Share2 size={40} />
+            {/* City of Montgomery official badge */}
+            <div className="flex flex-col items-center space-y-3 print:space-y-2">
+              <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200 print:shadow-none text-4xl">
+                🏛️
+              </div>
+              <div>
+                <p className="text-xs font-bold tracking-[0.25em] uppercase text-amber-700">
+                  City of Montgomery
+                </p>
+                <p className="text-xs text-slate-400 tracking-widest uppercase mt-0.5">
+                  Alabama · Public Safety
+                </p>
+              </div>
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent"></div>
             </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-indigo-900">
-            SafeVoice
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 max-w-lg mx-auto font-medium">
-            Scan to access the anonymous reporting portal and hazard map.
-          </p>
-        </div>
 
-        <div className="flex justify-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 print:border-none print:bg-white">
-          {appUrl && (
-            <QRCodeSVG
-              value={appUrl}
-              size={300}
-              level="H"
-              includeMargin={true}
-              className="w-full max-w-[300px] h-auto"
-            />
-          )}
-        </div>
+            <div>
+              <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-indigo-900">
+                SafeVoice
+              </h1>
+            </div>
+
+            <p className="text-xl md:text-2xl text-slate-600 max-w-lg mx-auto font-medium">
+              Scan to access the anonymous reporting portal and hazard map.
+            </p>
+          </div>
+
+          <div className="flex justify-center p-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 print:border-none print:bg-white">
+            {appUrl && (
+              <QRCodeSVG
+                value={appUrl}
+                size={300}
+                level="H"
+                includeMargin={true}
+                className="w-full max-w-[300px] h-auto"
+              />
+            )}
+          </div>
 
           <div className="space-y-4 print:hidden">
             <p className="text-slate-500">
-              Print this code to create decals, posters, or flyers for your community.
+              Print this code to create decals, posters, or flyers for your
+              community.
             </p>
             <button
               onClick={handlePrint}
@@ -80,6 +95,12 @@ export default function SharePage() {
               <span>Print QR code</span>
             </button>
           </div>
+
+          {/* Print-only footer */}
+          <p className="hidden print:block text-xs text-slate-400 mt-8 tracking-wide">
+            An official service of the City of Montgomery, Alabama ·
+            safetyreport.montgomery.gov
+          </p>
         </div>
       </main>
     </div>
