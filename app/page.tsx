@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Shield,
   Users,
@@ -16,8 +17,14 @@ export default function Home() {
       <div className="max-w-5xl w-full space-y-8">
         <div className="text-center space-y-4">
           <div className="flex flex-col items-center space-y-3 print:space-y-2">
-            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-200 print:shadow-none text-4xl">
-              🏛️
+            <div className="flex items-center justify-center w-20 h-20 rounded-full overflow-hidden shadow-lg shadow-amber-200 print:shadow-none">
+              <Image
+                src="/images/montgomery_city_logo.jpeg"
+                alt="City of Montgomery logo"
+                width={80}
+                height={80}
+                className="object-cover w-full h-full"
+              />
             </div>
             <div>
               <p className="text-xs font-bold tracking-[0.25em] uppercase text-amber-700">
