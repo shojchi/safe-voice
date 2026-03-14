@@ -12,6 +12,7 @@ import {
   ArrowLeft,
   Database,
   Trash2,
+  ChevronDown,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Case } from "@/lib/db";
@@ -19,6 +20,12 @@ import type { Case } from "@/lib/db";
 export default function InvestigatorDashboard() {
   const [cases, setCases] = useState<Case[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "a-z" | "z-a">(
+    "newest",
+  );
+  const [filterBy, setFilterBy] = useState<"all" | "temporary" | "permanent">(
+    "all",
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isSeeding, setIsSeeding] = useState(false);
 
@@ -112,18 +119,70 @@ export default function InvestigatorDashboard() {
               <span>{isSeeding ? "Seeding..." : "Seed Demo Data"}</span>
             </button>
           </div>
-          <div className="relative w-full sm:w-64 shrink-0">
-            <input
-              type="text"
-              placeholder="Search cases..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all text-sm bg-white"
-            />
-            <Search
-              size={18}
-              className="absolute left-3 top-2.5 text-slate-400"
-            />
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="flex items-center gap-3">
+              <div className="relative group flex-1 sm:flex-none">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="appearance-none w-full pl-3 pr-10 py-2 rounded-xl border border-slate-200 bg-white 
+                  text-sm font-medium text-slate-700 shadow-sm
+                  hover:border-slate-300 hover:bg-slate-50
+                  focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none 
+                  transition-all cursor-pointer min-w-[120px]"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="a-z">A-Z</option>
+                  <option value="z-a">Z-A</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none 
+                  transition-transform group-hover:translate-y-[-40%]"
+                />
+              </div>
+
+              <div className="relative group flex-1 sm:flex-none">
+                <select
+                  value={filterBy}
+                  onChange={(e) => setFilterBy(e.target.value as any)}
+                  className="appearance-none w-full pl-3 pr-12 py-2 rounded-xl border border-slate-200 bg-white 
+                  text-sm font-medium text-slate-700 shadow-sm
+                  hover:border-slate-300 hover:bg-slate-50
+                  focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none 
+                  transition-all cursor-pointer min-w-[120px]"
+                >
+                  <option value="all">All Cases</option>
+                  <option value="temporary">Temporary</option>
+                  <option value="permanent">Permanent</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none
+                  transition-transform group-hover:translate-y-[-40%]"
+                />
+              </div>
+            </div>
+
+            <div className="relative w-full sm:w-64 shrink-0 group">
+              <input
+                type="text"
+                placeholder="Search cases..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 bg-white
+                text-sm font-medium text-slate-700 shadow-sm
+                hover:border-slate-300 hover:bg-slate-50
+                focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none 
+                transition-all"
+              />
+              <Search
+                size={18}
+                className="absolute left-3.5 top-2.5 text-slate-400 group-focus-within:text-amber-500 transition-colors"
+              />
+            </div>
           </div>
         </div>
 
@@ -133,14 +192,47 @@ export default function InvestigatorDashboard() {
           </div>
         ) : (
           (() => {
-            const filteredCases = cases.filter(
-              (c) =>
-                c.caseNumber
-                  .toLowerCase()
-                  .includes(searchQuery.toLowerCase()) ||
-                c.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                c.status.toLowerCase().includes(searchQuery.toLowerCase()),
-            );
+            let result = cases;
+
+            if (filterBy === "temporary") {
+              result = result.filter((c) => c.isTemporary);
+            } else if (filterBy === "permanent") {
+              result = result.filter((c) => !c.isTemporary);
+            }
+
+            if (searchQuery.trim()) {
+              const query = searchQuery.toLowerCase();
+              result = result.filter(
+                (c) =>
+                  c.caseNumber.toLowerCase().includes(query) ||
+                  c.id.toLowerCase().includes(query) ||
+                  c.status.toLowerCase().includes(query),
+              );
+            }
+
+            result = [...result].sort((a, b) => {
+              if (sortBy === "newest") {
+                return (
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
+                );
+              }
+              if (sortBy === "oldest") {
+                return (
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime()
+                );
+              }
+              if (sortBy === "a-z") {
+                return a.caseNumber.localeCompare(b.caseNumber);
+              }
+              if (sortBy === "z-a") {
+                return b.caseNumber.localeCompare(a.caseNumber);
+              }
+              return 0;
+            });
+
+            const filteredCases = result;
 
             if (filteredCases.length === 0) {
               return (
