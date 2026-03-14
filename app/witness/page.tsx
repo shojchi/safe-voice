@@ -23,7 +23,7 @@ export default function WitnessEntry() {
           <div className="flex items-center space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
@@ -73,7 +73,7 @@ export default function WitnessEntry() {
             <button
               type="submit"
               disabled={!caseId.trim()}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 cursor-pointer"
             >
               <span>Continue</span>
               <ArrowRight size={18} />

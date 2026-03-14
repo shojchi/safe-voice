@@ -89,7 +89,7 @@ export default function MapPage() {
           <div className="flex items-center space-x-3 sm:space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 shrink-0"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 shrink-0 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
@@ -111,7 +111,7 @@ export default function MapPage() {
             <select 
               value={timeframe}
               onChange={(e) => setTimeframe(e.target.value as Timeframe)}
-              className="bg-slate-100 border-none text-xs sm:text-sm font-medium rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:ring-2 focus:ring-orange-500 outline-none text-center"
+              className="bg-slate-100 border-none text-xs sm:text-sm font-medium rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:ring-2 focus:ring-orange-500 outline-none text-center cursor-pointer"
             >
               <option value="30m">30 Min</option>
               <option value="1h">1 Hour</option>

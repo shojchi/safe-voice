@@ -18,6 +18,7 @@ import type { Case } from "@/lib/db";
 
 export default function InvestigatorDashboard() {
   const [cases, setCases] = useState<Case[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSeeding, setIsSeeding] = useState(false);
 
@@ -79,7 +80,7 @@ export default function InvestigatorDashboard() {
           <div className="flex items-center space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
@@ -97,24 +98,26 @@ export default function InvestigatorDashboard() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+          <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto sm:space-x-4">
             <h2 className="text-2xl font-semibold text-slate-800">
               Active Cases
             </h2>
             <button
               onClick={handleSeed}
               disabled={isSeeding}
-              className="flex items-center space-x-2 text-xs font-medium bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center space-x-2 text-xs font-medium bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 shrink-0 cursor-pointer"
             >
               <Database size={14} />
               <span>{isSeeding ? "Seeding..." : "Seed Demo Data"}</span>
             </button>
           </div>
-          <div className="relative w-64">
+          <div className="relative w-full sm:w-64 shrink-0">
             <input
               type="text"
               placeholder="Search cases..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all text-sm"
             />
             <Search
@@ -128,51 +131,69 @@ export default function InvestigatorDashboard() {
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
           </div>
-        ) : cases.length === 0 ? (
-          <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-4">
-            <FileText size={48} className="mx-auto text-slate-300" />
-            <p className="text-slate-500">No active cases found.</p>
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {cases.map((c) => (
-              <Link
-                key={c.id}
-                href={`/investigator/${c.id}`}
-                className="group block"
+        ) : (() => {
+          const filteredCases = cases.filter(
+            (c) =>
+              c.caseNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              c.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              c.status.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+          
+          if (filteredCases.length === 0) {
+            return (
+              <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center space-y-4">
+                <FileText size={48} className="mx-auto text-slate-300" />
+                <p className="text-slate-500">
+                  {cases.length === 0 ? "No active cases found." : "No cases match your search."}
+                </p>
+              </div>
+            );
+          }
+          
+          return (
+            <div className="grid gap-4">
+              {filteredCases.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/investigator/${c.id}`}
+                className="group block cursor-pointer"
               >
-                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-center justify-between">
-                  <div className="space-y-1">
-                    <div className="flex items-center space-x-3">
-                      <h3 className="text-lg font-semibold text-slate-800">
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex flex-col sm:flex-row justify-between gap-4">
+                  <div className="space-y-3 sm:space-y-2 flex-grow min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-start lg:items-center gap-2 sm:gap-3">
+                      <h3 className="text-base sm:text-lg font-semibold text-slate-800 leading-snug break-words">
                         {c.caseNumber}
                       </h3>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                        {c.status.toUpperCase()}
-                      </span>
-                      {c.isTemporary && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                          TEMPORARY
+                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-emerald-100 text-emerald-800">
+                          {c.status.toUpperCase()}
                         </span>
-                      )}
+                        {c.isTemporary && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-amber-100 text-amber-800">
+                            TEMPORARY
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center text-sm text-slate-500 space-x-4">
-                      <span className="flex items-center space-x-1">
-                        <Clock size={14} />
-                        <span>
+                    <div className="flex flex-col sm:flex-row sm:items-center text-xs sm:text-sm text-slate-500 gap-2 sm:gap-4">
+                      <span className="flex items-center space-x-1.5 min-w-0">
+                        <Clock size={14} className="shrink-0" />
+                        <span className="truncate">
                           Created{" "}
                           {formatDistanceToNow(new Date(c.createdAt), {
                             addSuffix: true,
                           })}
                         </span>
                       </span>
-                      <span>ID: {c.id.slice(0, 8)}...</span>
+                      <span className="font-mono text-[10px] sm:text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-500 w-fit">
+                        ID: {c.id.slice(0, 8)}...
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-between space-x-2 shrink-0 border-t border-slate-100 sm:border-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
                     <button
                       onClick={(e) => handleDeleteCase(e, c.id)}
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all cursor-pointer"
                       title="Delete Case"
                     >
                       <Trash2 size={20} />
@@ -184,8 +205,9 @@ export default function InvestigatorDashboard() {
                 </div>
               </Link>
             ))}
-          </div>
-        )}
+            </div>
+          );
+        })()}
       </main>
     </div>
   );

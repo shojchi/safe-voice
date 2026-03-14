@@ -410,7 +410,7 @@ function UniversalReportContent() {
                 setAudioBlob(null);
               }}
               href="/"
-              className="text-emerald-600 font-medium hover:text-emerald-800 transition-colors"
+              className="text-emerald-600 font-medium hover:text-emerald-800 transition-colors cursor-pointer"
             >
               Return to Dashboard
             </Link>
@@ -434,7 +434,7 @@ function UniversalReportContent() {
                     setMode("select");
                   }
                 }}
-                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -465,7 +465,7 @@ function UniversalReportContent() {
             <div className="grid gap-4">
               <button
                 onClick={() => handleModeSelect("crime")}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-100 transition-colors">
                   <ShieldAlert size={32} />
@@ -482,7 +482,7 @@ function UniversalReportContent() {
 
               <button
                 onClick={() => handleModeSelect("hazard")}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-100 transition-colors">
                   <Wind size={32} />
@@ -515,7 +515,7 @@ function UniversalReportContent() {
                   if (initialMode === "crime") router.push("/");
                   else setMode("select");
                 }}
-                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -547,13 +547,13 @@ function UniversalReportContent() {
             <div className="grid gap-4">
               <button
                 onClick={() => setAnonymityChoice("anonymous")}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-slate-100 text-slate-600 rounded-xl group-hover:bg-slate-200 transition-colors">
                   <ShieldAlert size={32} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-800">
+                  <h2 className="text-xl font-bold text-slate-800 cursor-pointer">
                     Report Anonymously
                   </h2>
                   <p className="text-sm text-slate-500 mt-1">
@@ -564,13 +564,13 @@ function UniversalReportContent() {
 
               <button
                 onClick={() => setShowContactForm(true)}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-100 transition-colors">
                   <User size={32} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-800">
+                  <h2 className="text-xl font-bold text-slate-800 cursor-pointer">
                     Provide My Details
                   </h2>
                   <p className="text-sm text-slate-500 mt-1">
@@ -593,7 +593,7 @@ function UniversalReportContent() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowContactForm(false)}
-                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -659,7 +659,7 @@ function UniversalReportContent() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors cursor-pointer"
               >
                 Continue to Record
               </button>
@@ -741,14 +741,14 @@ function UniversalReportContent() {
             {!audioUrl && !isRecording ? (
               <button
                 onClick={startRecording}
-                className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30 transition-all hover:scale-105"
+                className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30 transition-all hover:scale-105 cursor-pointer"
               >
                 <Mic size={32} />
               </button>
             ) : isRecording ? (
               <button
                 onClick={stopRecording}
-                className="w-20 h-20 bg-slate-800 hover:bg-slate-900 rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-105 animate-pulse"
+                className="w-20 h-20 bg-slate-800 hover:bg-slate-900 rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-105 animate-pulse cursor-pointer"
               >
                 <Square size={24} className="fill-current" />
               </button>
@@ -762,7 +762,7 @@ function UniversalReportContent() {
                       setAudioBlob(null);
                       setRecordingTime(0);
                     }}
-                    className="flex-1 py-2 px-4 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                    className="flex-1 py-2 px-4 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors cursor-pointer"
                     disabled={isSubmitting}
                   >
                     Retake
@@ -770,7 +770,7 @@ function UniversalReportContent() {
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                    className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center space-x-2 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>

@@ -47,7 +47,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
           {/* Crime / Suspicious Activity */}
-          <Link href="/report?type=crime" className="group block h-full">
+          <Link href="/report?type=crime" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-indigo-50 rounded-full text-indigo-600 group-hover:bg-indigo-100 transition-colors">
                 <ShieldAlert size={32} />
@@ -62,7 +62,7 @@ export default function Home() {
           </Link>
 
           {/* Hazard / Disaster */}
-          <Link href="/report?type=hazard" className="group block h-full">
+          <Link href="/report?type=hazard" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-amber-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-amber-50 rounded-full text-amber-600 group-hover:bg-amber-100 transition-colors">
                 <Wind size={32} />
@@ -75,7 +75,7 @@ export default function Home() {
           </Link>
 
           {/* Hazard Map */}
-          <Link href="/map" className="group block h-full">
+          <Link href="/map" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-orange-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-orange-50 rounded-full text-orange-600 group-hover:bg-orange-100 transition-colors">
                 <Map size={32} />
@@ -88,7 +88,7 @@ export default function Home() {
           </Link>
 
           {/* Investigator Persona */}
-          <Link href="/investigator" className="group block h-full">
+          <Link href="/investigator" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-amber-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-amber-50 rounded-full text-amber-600 group-hover:bg-amber-100 transition-colors">
                 <FileText size={32} />
@@ -102,7 +102,7 @@ export default function Home() {
           </Link>
 
           {/* Officer Persona */}
-          <Link href="/officer" className="group block h-full">
+          <Link href="/officer" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-blue-50 rounded-full text-blue-600 group-hover:bg-blue-100 transition-colors">
                 <Shield size={32} />
@@ -116,7 +116,7 @@ export default function Home() {
           </Link>
 
           {/* Share App / QR Code */}
-          <Link href="/share" className="group block h-full">
+          <Link href="/share" className="group block h-full cursor-pointer">
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all h-full flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-blue-50 rounded-full text-blue-600 group-hover:bg-blue-100 transition-colors">
                 <Share2 size={32} />

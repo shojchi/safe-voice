@@ -54,7 +54,7 @@ export default function OfficerDashboard() {
           <div className="flex items-center space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
@@ -104,7 +104,7 @@ export default function OfficerDashboard() {
               <button
                 type="submit"
                 disabled={isSubmitting || !caseNumber.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? "Generating..." : "Generate QR Code & Link"}
               </button>
@@ -134,7 +134,7 @@ export default function OfficerDashboard() {
                 />
                 <button
                   onClick={handlePrint}
-                  className="flex items-center space-x-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors print:hidden"
+                  className="flex items-center space-x-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors print:hidden cursor-pointer"
                 >
                   <Printer size={16} />
                   <span>Print QR Code</span>
@@ -155,7 +155,7 @@ export default function OfficerDashboard() {
                 />
                 <button
                   onClick={copyToClipboard}
-                  className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                  className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors cursor-pointer"
                   title="Copy link"
                 >
                   {copied ? (
@@ -173,7 +173,7 @@ export default function OfficerDashboard() {
                   setGeneratedCase(null);
                   setCaseNumber("");
                 }}
-                className="text-indigo-600 font-medium hover:text-indigo-800 transition-colors"
+                className="text-indigo-600 font-medium hover:text-indigo-800 transition-colors cursor-pointer"
               >
                 Generate another link
               </button>

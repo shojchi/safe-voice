@@ -26,7 +26,7 @@ export default function SharePage() {
           <div className="flex items-center space-x-4">
             <Link
               href="/"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
@@ -96,7 +96,7 @@ export default function SharePage() {
             </p>
             <button
               onClick={handlePrint}
-              className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors shadow-md hover:shadow-lg"
+              className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors shadow-md hover:shadow-lg cursor-pointer"
             >
               <Printer size={24} />
               <span>Print QR code</span>

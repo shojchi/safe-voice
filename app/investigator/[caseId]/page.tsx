@@ -77,7 +77,7 @@ export default function CaseDetails() {
         <h1 className="text-2xl font-bold text-slate-800">Case not found</h1>
         <button
           onClick={() => router.push("/investigator")}
-          className="text-amber-600 hover:underline"
+          className="text-amber-600 hover:underline cursor-pointer"
         >
           Back to Dashboard
         </button>
@@ -142,86 +142,84 @@ export default function CaseDetails() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 min-h-[4rem] flex items-center justify-between gap-4">
+          <div className="flex flex-1 items-center space-x-3 sm:space-x-4 min-w-0 font-medium">
             <Link
               href="/investigator"
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 shrink-0 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </Link>
-            <div className="h-6 w-px bg-slate-200"></div>
-            <div className="flex items-center space-x-3">
-              <div className="p-1.5 bg-amber-100 rounded text-amber-700">
+            <div className="h-6 w-px bg-slate-200 shrink-0"></div>
+            <div className="flex items-center space-x-3 min-w-0 flex-1">
+              <div className="p-1.5 bg-amber-100 rounded text-amber-700 shrink-0">
                 <ShieldAlert size={20} />
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="min-w-0 flex-1">
                 {isEditingCad ? (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center flex-wrap gap-2">
                     <input
                       type="text"
                       value={newCadNumber}
                       onChange={(e) => setNewCadNumber(e.target.value)}
                       placeholder="Enter CAD Number"
-                      className="px-3 py-1 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="px-3 py-1 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 w-32 sm:w-auto"
                       autoFocus
                     />
                     <button
                       onClick={handleSaveCad}
                       disabled={isSavingCad}
-                      className="text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-md font-medium transition-colors disabled:opacity-50"
+                      className="text-xs bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-md font-medium transition-colors disabled:opacity-50 cursor-pointer"
                     >
                       {isSavingCad ? "Saving..." : "Save"}
                     </button>
                     <button
                       onClick={() => setIsEditingCad(false)}
-                      className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1"
+                      className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1 cursor-pointer"
                     >
                       Cancel
                     </button>
                   </div>
                 ) : (
-                  <>
-                    <h1 className="text-lg font-bold text-slate-800">
-                      Case {caseData.caseNumber}
-                    </h1>
+                  <h1 className="text-lg font-bold text-slate-800 break-words leading-tight">
+                    Case {caseData.caseNumber}
                     {caseData.isTemporary && (
                       <button
                         onClick={() => {
                           setNewCadNumber("");
                           setIsEditingCad(true);
                         }}
-                        className="p-1 text-slate-400 hover:text-amber-600 transition-colors rounded"
+                        className="ml-2 inline-flex align-middle text-slate-400 hover:text-amber-600 transition-colors rounded focus:outline-none cursor-pointer"
                         title="Assign Official CAD Number"
                       >
-                        <Edit2 size={16} />
+                        <Edit2 size={18} />
                       </button>
                     )}
-                  </>
+                  </h1>
                 )}
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-3 print:hidden">
+          <div className="flex items-center justify-end gap-3 print:hidden shrink-0">
             <button
               onClick={handleDeleteCase}
-              className="flex items-center space-x-2 text-red-600 hover:bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 border border-red-200 w-10 h-10 p-0 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer"
             >
-              <Trash2 size={16} />
-              <span>Delete Case</span>
+              <Trash2 size={18} />
+              <span className="hidden sm:inline">Delete Case</span>
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+              className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 text-white w-10 h-10 p-0 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-lg text-sm font-medium transition-colors shadow-sm cursor-pointer"
             >
-              <Printer size={16} />
-              <span>Print to PDF</span>
+              <Printer size={18} />
+              <span className="hidden sm:inline">Print to PDF</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-slate-800">
@@ -247,24 +245,33 @@ export default function CaseDetails() {
                 key={stmt.id}
                 className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
               >
-                <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                <div
+                  className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col 
+                sm:flex-row sm:items-center justify-between gap-4"
+                >
                   <div className="flex items-center space-x-4">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <div className="flex flex-col min-w-0">
+                      <span
+                        className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase 
+                      tracking-wider"
+                      >
                         Statement ID
                       </span>
-                      <span className="font-mono text-sm text-slate-700">
+                      <span className="font-mono text-xs sm:text-sm text-slate-700 truncate">
                         {stmt.id.slice(0, 8)}
                       </span>
                     </div>
-                    <div className="h-8 w-px bg-slate-200"></div>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <div className="h-8 w-px bg-slate-200 shrink-0"></div>
+                    <div className="flex flex-col min-w-0">
+                      <span
+                        className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase 
+                      tracking-wider"
+                      >
                         Submitted
                       </span>
-                      <span className="text-sm text-slate-700 flex items-center space-x-1">
-                        <Clock size={14} className="text-slate-400" />
-                        <span>
+                      <span className="text-xs sm:text-sm text-slate-700 flex items-center space-x-1">
+                        <Clock size={14} className="text-slate-400 shrink-0" />
+                        <span className="truncate">
                           {formatDistanceToNow(new Date(stmt.createdAt), {
                             addSuffix: true,
                           })}
@@ -273,9 +280,9 @@ export default function CaseDetails() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <div className="flex flex-col items-end">
-                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <div className="flex items-center justify-between w-full sm:w-auto sm:justify-end sm:space-x-2 border-t border-slate-200 sm:border-t-0 pt-3 sm:pt-0 mt-1 sm:mt-0">
+                    <div className="flex flex-col items-start sm:items-end w-full sm:w-auto">
+                      <span className="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">
                         Credibility
                       </span>
                       <div className="flex items-center space-x-1">
@@ -287,10 +294,10 @@ export default function CaseDetails() {
                         </span>
                       </div>
                     </div>
-                    <div className="h-8 w-px bg-slate-200 ml-2 border-l border-slate-200"></div>
+                    <div className="h-8 w-px bg-slate-200 mx-2 hidden sm:block"></div>
                     <button
                       onClick={() => handleDeleteStatement(stmt.id)}
-                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors shrink-0 cursor-pointer"
                       title="Delete Statement"
                     >
                       <Trash2 size={18} />

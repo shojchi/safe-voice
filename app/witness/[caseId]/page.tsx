@@ -310,7 +310,7 @@ export default function WitnessRecording() {
           <div className="pt-6 border-t border-slate-100">
             <button
               onClick={() => router.push("/")}
-              className="text-emerald-600 font-medium hover:text-emerald-800 transition-colors"
+              className="text-emerald-600 font-medium hover:text-emerald-800 transition-colors cursor-pointer"
             >
               Return Home
             </button>
@@ -328,7 +328,7 @@ export default function WitnessRecording() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => router.push("/")}
-                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -360,7 +360,7 @@ export default function WitnessRecording() {
             <div className="grid gap-4">
               <button
                 onClick={() => setAnonymityChoice("anonymous")}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-slate-100 text-slate-600 rounded-xl group-hover:bg-slate-200 transition-colors">
                   <ShieldAlert size={32} />
@@ -377,7 +377,7 @@ export default function WitnessRecording() {
 
               <button
                 onClick={() => setShowContactForm(true)}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center space-x-4 text-left group cursor-pointer"
               >
                 <div className="p-4 bg-indigo-50 text-indigo-600 rounded-xl group-hover:bg-indigo-100 transition-colors">
                   <User size={32} />
@@ -406,7 +406,7 @@ export default function WitnessRecording() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowContactForm(false)}
-                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+                className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -472,7 +472,7 @@ export default function WitnessRecording() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl transition-colors cursor-pointer"
               >
                 Continue to Record
               </button>
@@ -490,7 +490,7 @@ export default function WitnessRecording() {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setAnonymityChoice("pending")}
-              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100"
+              className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors rounded-full hover:bg-slate-100 cursor-pointer"
             >
               <ArrowLeft size={20} />
             </button>
@@ -538,14 +538,14 @@ export default function WitnessRecording() {
             {!audioUrl && !isRecording ? (
               <button
                 onClick={startRecording}
-                className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30 transition-all hover:scale-105"
+                className="w-20 h-20 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-red-500/30 transition-all hover:scale-105 cursor-pointer"
               >
                 <Mic size={32} />
               </button>
             ) : isRecording ? (
               <button
                 onClick={stopRecording}
-                className="w-20 h-20 bg-slate-800 hover:bg-slate-900 rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-105 animate-pulse"
+                className="w-20 h-20 bg-slate-800 hover:bg-slate-900 rounded-full flex items-center justify-center text-white shadow-lg transition-all hover:scale-105 animate-pulse cursor-pointer"
               >
                 <Square size={24} className="fill-current" />
               </button>
@@ -559,7 +559,7 @@ export default function WitnessRecording() {
                       setAudioBlob(null);
                       setRecordingTime(0);
                     }}
-                    className="flex-1 py-2 px-4 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                    className="flex-1 py-2 px-4 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors cursor-pointer"
                     disabled={isSubmitting}
                   >
                     Retake
@@ -567,7 +567,7 @@ export default function WitnessRecording() {
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                    className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center justify-center space-x-2 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
