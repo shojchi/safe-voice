@@ -1,7 +1,5 @@
 # Safe Voice - Project Documentation & Architecture
 
-This document serves as the primary context file for porting the "Safe Voice" project between different AI coding environments (like AI Studio and Antigravity). It contains the complete architectural overview, tech stack, data models, and feature breakdown.
-
 ## 1. Project Overview
 
 **Safe Voice** is an AI-powered, anonymous reporting and witness statement collection system designed for public safety and emergency response. It allows citizens and on-scene witnesses to submit audio reports of crimes or hazards. Officers can generate secure QR-code links for anonymous statement collection at incident scenes. The system uses the Google Gemini API to transcribe audio, extract structured data (suspect details, hazard types, locations), evaluate credibility, and flag critical information.
